@@ -1,0 +1,38 @@
+[project]
+name = "meshes4mic"
+dynamic = ["version"]
+description = "A Python package for efficient 3D mesh processing and visualization tailored to microscopy image analysis, bridging the gap between volumetric data and surface representation for biological research."
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Clément H. BENEDETTI"}, 
+    {email = "clement.benedetti@rule150.com"}]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Processing"]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "tifffile",
+    "psutil",
+    "dask"]
+
+
+
+[build-system]
+requires = ["setuptools", "wheel", "pybind11"]
+build-backend = "setuptools.build_meta"
+
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
