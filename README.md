@@ -1,5 +1,8 @@
 # Meshes4Mic
 
+A Python package for efficient 3D mesh processing and visualization tailored to microscopy image analysis, bridging the gap between volumetric data and surface representation for biological research.
+This package will be the backbone of a Blender addon and a Napari plugin.
+
 ## Mask/labels-map ↦ meshes
 
 > Allows to transform a binary mask or a labels-map into a set of meshes.
@@ -17,3 +20,4 @@ The OME-TIF and OME-ZAR file formats are the only supported formats.
 - [ ] Bufferized marching-cube.
 - [ ] Bufferized dual-contouring.
 - [ ] Mesh optimization.
+- [ ] Start writing unit-tests.
