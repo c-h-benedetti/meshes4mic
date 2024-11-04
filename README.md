@@ -1,11 +1,4 @@
-███╗   ███╗███████╗███████╗██╗  ██╗███████╗███████╗██╗  ██╗███╗   ███╗██╗ ██████╗
-████╗ ████║██╔════╝██╔════╝██║  ██║██╔════╝██╔════╝██║  ██║████╗ ████║██║██╔════╝
-██╔████╔██║█████╗  ███████╗███████║█████╗  ███████╗███████║██╔████╔██║██║██║     
-██║╚██╔╝██║██╔══╝  ╚════██║██╔══██║██╔══╝  ╚════██║╚════██║██║╚██╔╝██║██║██║     
-██║ ╚═╝ ██║███████╗███████║██║  ██║███████╗███████║     ██║██║ ╚═╝ ██║██║╚██████╗
-╚═╝     ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝     ╚═╝╚═╝     ╚═╝╚═╝ ╚═════╝
-
-
+# Meshes4Mic
 
 A Python package for efficient 3D mesh processing and visualization tailored to microscopy image analysis, bridging the gap between volumetric data and surface representation for biological research.
 This package will be the backbone of a Blender addon and a Napari plugin.
