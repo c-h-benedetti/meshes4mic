@@ -1,8 +1,8 @@
-from ltm import LTM
+from meshes4mic.convert.ltm_worker import LTM_Worker
 import os
 import re
 
-class ZarrToMeshes(LTM):
+class ZarrToMeshes(LTM_Worker):
     def __init__(self, data_path):
         super().__init__(data_path)
     

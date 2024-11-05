@@ -1,6 +1,7 @@
-from image_properties import ImageAttributes
+from meshes4mic.convert.image_properties import ImageProperties
+import numpy as np
 
-class TiffAttributes(ImageAttributes):
+class TiffProperties(ImageProperties):
     def __init__(self, ome_xml, tif_metadata):
         self._tmp_ome_xml      = ome_xml
         self._tmp_tif_metadata = tif_metadata
@@ -44,17 +45,17 @@ class TiffAttributes(ImageAttributes):
             raise ValueError("Inconsistent shape and axes.")
         for axis, value in zip(axes, shape):
             if axis == "X":
-                self.width = value
+                self.width = int(value)
             elif axis == "Y":
-                self.height = value
+                self.height = int(value)
             elif axis == "Z":
-                self.depth = value
+                self.depth = int(value)
             elif axis == "C":
-                self.n_channels = value
+                self.n_channels = int(value)
             elif axis == "T":
-                self.n_frames = value
+                self.n_frames = int(value)
 
     def _parse_tif_data(self):
-        self.dtype = self._tmp_tif_metadata.dtype
+        self.dtype = np.dtype(self._tmp_tif_metadata.dtype).type
         self.axes = self._tmp_tif_metadata.axes
         self._decapsulate_shape(self._tmp_tif_metadata.shape, self.axes)

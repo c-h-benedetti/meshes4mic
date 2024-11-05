@@ -1,30 +1,40 @@
 import psutil
-from utils import verbose_bytes
-from tiff2meshes import TiffToMeshes
-from mtiff2meshes import MultiTiffToMeshes
-from zarr2meshes import ZarrToMeshes
+from meshes4mic.convert.utils import verbose_bytes
+from meshes4mic.convert.tiff2meshes import TiffToMeshes
+from meshes4mic.convert.zarr2meshes import ZarrToMeshes
 
-class LabelsToMesh(object):
+
+class LabelsToMeshes(object):
 
     candidates = [
-        TiffToMeshes, 
-        MultiTiffToMeshes, 
+        TiffToMeshes,
         ZarrToMeshes
     ]
 
-    def __init__(self, labels_path, verbose=False, memory_limit=None, threads_limit=None):
+    def __init__(self, labels_path, sampling=1, verbose=False, memory_limit=None, threads_limit=None):
         # Absolute path of the image to be processed.
         self._labels_path = None
         # Object that will be used to process the image.
         self._processor = None
         # Whether to print information during the process.
-        self.verbose = verbose
+        self._verbose = verbose
+        # Maximum amount of memory to use.
+        self._max_memory = None
+        # Maximum number of threads to use.
+        self._max_threads = None
+        # Sampling rate of the voxels grid.
+        self.sampling_rate = sampling
 
-        self._set_max_memory(memory_limit)
-        self._set_n_thread(threads_limit)
+        self.max_memory = memory_limit
+        self.n_threads  = threads_limit
         self._set_data_path(labels_path)
     
-    def _set_max_memory(self, max_memory):
+    @property
+    def max_memory(self):
+        return self._max_memory
+
+    @max_memory.setter
+    def max_memory(self, max_memory):
         """
         Allows to set manually the maximum amount of memory to use.
 
@@ -32,14 +42,19 @@ class LabelsToMesh(object):
             max_memory (int): Max number of bytes that we can use. 
                               If None, it will use either 50% of the total memory or 90% of the available memory.
         """
-        self.max_memory = max_memory
+        self._max_memory = max_memory
         if max_memory is None:
-            self.max_memory = min(
+            self._max_memory = min(
                 int(0.5 * psutil.virtual_memory().total),
                 int(0.9 * psutil.virtual_memory().available))
-        self._log(f"Max memory: {verbose_bytes(self.max_memory)}")
+        self._log(f"Max memory: {verbose_bytes(self._max_memory)}")
     
-    def _set_n_thread(self, threads_limit):
+    @property
+    def n_threads(self):
+        return self._max_threads
+
+    @n_threads.setter
+    def n_threads(self, threads_limit):
         """
         Allows to set manually the maximum number of threads to use.
 
@@ -47,20 +62,21 @@ class LabelsToMesh(object):
             threads_limit (int): Max number of threads to use. 
                                  If None, it will use the number of logical CPUs.
         """
-        self.max_threads = threads_limit
+        self._max_threads = threads_limit
         if threads_limit is None:
-            self.max_threads = psutil.cpu_count(logical=True)
-        self._log(f"Max threads: {self.max_threads}")
+            self._max_threads = psutil.cpu_count(logical=True)
+        self._log(f"Max threads: {self._max_threads}")
 
     def _log(self, msg):
         """ Prints something if the verbose flag is set to True. """
-        if self.verbose:
+        if self._verbose:
             print(msg)
 
     def _set_data_path(self, labels_path):
         """ Tries to find the right candidate to process the image. """
         self._search_processor(labels_path)
         self._log(self._processor.get_image_properties())
+        self._log(self._processor.process_buckets(self.sampling_rate, self._max_memory))
     
     def _search_processor(self, labels_path):
         """
@@ -81,3 +97,12 @@ class LabelsToMesh(object):
                 self._processor   = c(labels_path)
                 return
         raise ValueError("Didn't find a valid candidate given the file extension.")
+    
+    def labels2meshes(self, output_path):
+        """
+        Converts the labels into meshes.
+
+        Args:
+            output_path (str): Absolute path of the folder where the meshes will be saved.
+        """
+        self._processor.labels2meshes(output_path, self.sampling_rate, self._max_threads)
