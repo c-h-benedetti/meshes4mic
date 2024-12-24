@@ -26,6 +26,18 @@ dependencies = [
     "dask"]
 
 
+[project.optional-dependencies]
+testing = [
+    "sphinx",
+    "sphinx_rtd_theme",
+    "myst_parser",
+    "sphinx_tabs",
+    "sphinxcontrib-napoleon",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock"
+]
+
 
 [build-system]
 requires = ["setuptools", "wheel", "pybind11"]

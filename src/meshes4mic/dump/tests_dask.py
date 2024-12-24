@@ -62,25 +62,20 @@ def measure_run_time(n_iters=10000):
 
 
 def process_image_multi_threads(data_path, n_workers=4, n_iters=10000):
-    # Declare the dask array.
     with tifffile.TiffFile(data_path) as tif:
         dask_array = da.from_array(tif.asarray())
 
-    # Prepare the output buffer.
     depth, n_channels, height, width = dask_array.shape
     bounding_boxes = make_random_boxes((depth, height, width), n_iters)
     results = []
 
-    # Create the threads pool.
     with ThreadPoolExecutor(max_workers=n_workers) as executor:
-        # Soumettre chaque chunk à un thread
         futures = {
             executor.submit(process_chunk, dask_array[i, j, :, :].compute()): (i, j)
-            for i in range(dask_array.shape[0])   # Z
-            for j in range(dask_array.shape[1])   # C
+            for i in range(dask_array.shape[0])
+            for j in range(dask_array.shape[1])
         }
         
-        # Récupérer les résultats au fur et à mesure
         for future in as_completed(futures):
             chunk_result = future.result()
             results.append(chunk_result)

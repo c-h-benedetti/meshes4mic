@@ -6,3 +6,6 @@ build
 __pycache__
 *.pyc
 data
+_build
+docs/meshes4mic.*
+docs/m4mcore.rst
