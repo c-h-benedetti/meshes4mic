@@ -24,16 +24,16 @@ constexpr float edge_to_shift[12][3] = {
 };
 
 struct Vec3 {
-    double x, y, z;
+    float x, y, z;
     Vec3() = default;
-    Vec3(double _z, double _y, double _x): x(_x), y(_y), z(_z) {}
+    Vec3(float _z, float _y, float _x): x(_x), y(_y), z(_z) {}
     Vec3(const Vec3&) = default;
 };
 
-// Current implementation: triangles soup
 struct Face {
-    Vec3 v1, v2, v3;
-    Face(Vec3 _v1, Vec3 _v2, Vec3 _v3): v1(_v1), v2(_v2), v3(_v3) {}
+    size_t v1, v2, v3;
+    Face() = default;
+    Face(size_t _v1, size_t _v2, size_t _v3): v1(_v1), v2(_v2), v3(_v3) {}
 };
 
 class MarchingCube;
@@ -58,18 +58,14 @@ class NeighborsZYX {
 
 private:
 
-    void layout_index();
-
-public:
-
-    uint8_t layout = 0;
+    uint8_t layout_index();
 
 public:
 
     NeighborsZYX() = default;
     NeighborsZYX(const MarchingCube& mc);
 
-    void set_index(size_t idx);
+    uint8_t get_layout(size_t idx);
 };
 
 class MarchingCube {
@@ -83,10 +79,12 @@ class MarchingCube {
     const std::array<size_t, 3> stride;
     /// List of faces of the mesh (triangles soup).
     std::vector<Face> faces;
+    /// List of vertices of the mesh.
+    std::vector<Vec3> vertices;
 
 private:
 
-    void build_faces(uint8_t layout, size_t z, size_t y, size_t x, std::array<Vec3, 12>& v_buffer);
+    void build_faces(uint8_t layout, Vec3 v, std::array<Vec3, 12>& v_buffer, std::array<size_t, 12>& i_buffer, std::vector<std::pair<bool, size_t>>& slice_buffer);
 
 public:
 

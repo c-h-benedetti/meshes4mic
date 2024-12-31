@@ -1,4 +1,10 @@
 
+TO-DO:
+
+- [ ] Terminer l'implémentation du indexed faces-set.
+
+---------------------------------------------------------------
+
 - Les "Neighbors" vont devoir hériter d'une classe qui permet de gérer les données selon toutes les combinaisons d'axes.
   On doit pouvoir se limiter à Z, Y et X (à moins que C soit entre Z et les deux autres ?)
 

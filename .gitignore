@@ -9,3 +9,4 @@ data
 _build
 docs/meshes4mic.*
 docs/m4mcore.rst
+src/meshes4mic/dump/*
