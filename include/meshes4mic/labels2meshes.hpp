@@ -84,7 +84,7 @@ class MarchingCube {
 
 private:
 
-    void build_faces(uint8_t layout, Vec3 v, std::array<Vec3, 12>& v_buffer, std::array<size_t, 12>& i_buffer, std::vector<std::pair<bool, size_t>>& slice_buffer);
+    void build_faces(uint8_t layout, Vec3 v, std::array<size_t, 12>& i_buffer, std::vector<std::pair<bool, size_t>>& slice_buffer);
 
 public:
 
